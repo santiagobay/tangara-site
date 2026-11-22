@@ -170,6 +170,30 @@ export default function Motion() {
         });
       });
 
+      /* 7b — Study pages: media opens from a smaller window and settles (clip-path + scale) */
+      gsap.utils.toArray<HTMLElement>("[data-clip]").forEach((el) => {
+        const inner = el.querySelector<HTMLElement>("[data-clip-inner]");
+        const st = { trigger: el, start: "top 92%", end: "top 20%", scrub: 0.6 };
+        gsap.fromTo(
+          el,
+          { clipPath: "inset(14% 10% 14% 10% round 18px)" },
+          { clipPath: "inset(0% 0% 0% 0% round 12px)", ease: "none", scrollTrigger: st },
+        );
+        if (inner) gsap.fromTo(inner, { scale: 1.18 }, { scale: 1, ease: "none", scrollTrigger: st });
+      });
+
+      /* 7c — Study pages: palette swatches rise one after another */
+      gsap.utils.toArray<HTMLElement>("[data-swatches]").forEach((group) => {
+        gsap.from(group.children, {
+          scaleY: 0,
+          transformOrigin: "bottom",
+          duration: 1.1,
+          ease: "power4.out",
+          stagger: 0.09,
+          scrollTrigger: { trigger: group, start: "top 85%" },
+        });
+      });
+
       /* 8 — Process line draws as you scroll */
       const line = document.querySelector<HTMLElement>("[data-process-line]");
       if (line) {

@@ -49,21 +49,21 @@ export default function Hero() {
       <HeroScene />
       <div className="hero-content">
         <div className="eyebrow" data-intro>
-          New studio · Brand, web &amp; 3D for small businesses
+          Brand · Web · 3D · Marketing
         </div>
-        <Split tag="h1" mode="intro" className="hero-title" text="A brand and | website that | *bring* you customers" />
+        <Split tag="h1" mode="intro" className="hero-title" text="Brands and websites | with real *depth*" />
         <p className="intro" data-intro>
-          We&apos;re a new, founder-led studio. You work directly with the people doing the work, get a
-          fixed quote before we start and a timeline in writing. Services from CAD $590.
+          Tangara designs identities, websites and 3D visuals for businesses across Canada. Strategy,
+          design and code from one team, so everything your customers see feels like the same company.
         </p>
         <div className="hero-actions" data-intro>
           <Magnetic>
             <a className="btn" href="#contact" onClick={(e) => jump(e, "#contact")}>
-              Get a quote <span aria-hidden="true">↗</span>
+              Start a project <span aria-hidden="true">↗</span>
             </a>
           </Magnetic>
-          <a className="text-link" href="#services" onClick={(e) => jump(e, "#services")}>
-            See services &amp; prices ↓
+          <a className="text-link" href="#work" onClick={(e) => jump(e, "#work")}>
+            See our work ↓
           </a>
         </div>
       </div>

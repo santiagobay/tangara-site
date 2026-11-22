@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: site.title,
     description: site.description,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Tangara — brand, websites & 3D for small businesses" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Tangara — brand, websites & 3D" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -54,10 +54,9 @@ const jsonLd = {
   email: site.email,
   logo: `${site.url}/brand/bird-mark.png`,
   slogan: site.tagline,
-  priceRange: "CAD 590+",
+  areaServed: "CA",
   image: `${site.url}/og.png`,
   description: site.description,
-  areaServed: "Worldwide",
   serviceType: [
     "Brand identity",
     "Website design and development",

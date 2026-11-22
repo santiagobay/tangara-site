@@ -1,14 +1,30 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Split from "../Split";
 import { showcase, type ShowcaseItem } from "@/lib/site";
 import Mock from "../Mocks";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+/** Plays the mock's micro-animation on hover (mouse) or while it is on screen (touch). */
+function usePlay() {
+  const ref = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia("(hover: hover)").matches) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.6 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return [ref, inView] as const;
+}
+
 function Card({ item }: { item: ShowcaseItem }) {
   const ref = useRef<HTMLDivElement>(null);
+  const [cardRef, inView] = usePlay();
 
   const move = (e: React.PointerEvent) => {
     const el = ref.current;
@@ -43,9 +59,10 @@ function Card({ item }: { item: ShowcaseItem }) {
 
   return (
     <article
-      className={`card ${item.live ? "is-live" : ""}`}
+      ref={cardRef as React.RefObject<HTMLElement>}
+      className={`card ${item.live ? "is-live" : ""} ${inView ? "is-play" : ""}`}
       data-gallery-card
-      data-cursor={item.live ? "Visit live ↗" : "Concept"}
+      data-cursor={item.live ? "Visit live ↗" : item.study ? "View study" : "Direction study"}
     >
       <div className="card-meta">
         <span className="mono">{item.n}</span>
@@ -55,7 +72,7 @@ function Card({ item }: { item: ShowcaseItem }) {
               <i aria-hidden="true" /> Self-initiated · Live
             </span>
           ) : (
-            <span className="concept-badge">Concept study · not a client</span>
+            <span className="concept-badge">Direction study · concept</span>
           )}
           {item.sector}
         </span>
@@ -71,6 +88,10 @@ function Card({ item }: { item: ShowcaseItem }) {
           >
             {browser}
           </a>
+        ) : item.study ? (
+          <Link href={`/work/${item.study}`} aria-label={`${item.name} — read the direction study`} className="browser-link">
+            {browser}
+          </Link>
         ) : (
           browser
         )}
@@ -81,6 +102,10 @@ function Card({ item }: { item: ShowcaseItem }) {
             <a href={item.live.href} target="_blank" rel="noopener noreferrer">
               {item.name} <span aria-hidden="true">↗</span>
             </a>
+          ) : item.study ? (
+            <Link href={`/work/${item.study}`}>
+              {item.name} <span aria-hidden="true">→</span>
+            </Link>
           ) : (
             item.name
           )}
@@ -101,6 +126,26 @@ function Card({ item }: { item: ShowcaseItem }) {
             <li key={t}>{t}</li>
           ))}
         </ul>
+        {item.approach && (
+          <details className="approach">
+            <summary>
+              How we&apos;d approach it <span aria-hidden="true">+</span>
+            </summary>
+            <ol>
+              {item.approach.map((a, i) => (
+                <li key={a}>
+                  <span className="mono">0{i + 1}</span>
+                  {a}
+                </li>
+              ))}
+            </ol>
+          </details>
+        )}
+        {item.study && (
+          <Link href={`/work/${item.study}`} className="text-link study-link">
+            Read the full study <span aria-hidden="true">→</span>
+          </Link>
+        )}
       </div>
     </article>
   );
@@ -118,12 +163,12 @@ function FirstCase() {
     <article className="card card-first" data-gallery-card>
       <div className="card-meta">
         <span className="mono">Next</span>
-        <span className="mono">Open spot</span>
+        <span className="mono">Now booking</span>
       </div>
       <a href="#contact" className="first-case" onClick={go} data-cursor="Let's talk">
-        <span className="first-case-k mono">Case study 01</span>
+        <span className="first-case-k mono">Next case study</span>
         <span className="first-case-t">
-          Your project could be our <em>first</em> case study
+          The next one <em>could</em> be yours
         </span>
         <span className="first-case-cta">
           Tell us what you&apos;re building <span aria-hidden="true">↗</span>
@@ -131,8 +176,8 @@ function FirstCase() {
       </a>
       <div className="card-foot">
         <p>
-          The first businesses we work with get the founders on every call, and the case study is written with
-          them, published only with their permission.
+          Every client project is planned with the whole team on the call, and published here only with the
+          client&apos;s permission.
         </p>
       </div>
     </article>
@@ -147,14 +192,13 @@ export default function Showcase() {
       <div className="work-inner">
         <div className="work-head">
           <div>
-            <div className="eyebrow">Studio work / self-initiated &amp; concept</div>
-            <Split text="No clients to show yet | Here's how we *build*" />
+            <div className="eyebrow">Work / studio projects &amp; direction studies</div>
+            <Split text="Studio projects and | *direction* studies" />
           </div>
           <div className="work-side">
             <p className="section-intro">
-              We&apos;re a new studio, so we won&apos;t borrow logos or invent results. What you see is one live
-              project we built for ourselves and six concept studies, each labelled for what it is. We design
-              and write in English and Spanish.
+              A live project built in-house and a series of direction studies: how we would approach a store,
+              a pre-sale, a restaurant or a launch. Each piece is labelled for what it is.
             </p>
             <div className="work-progress" aria-hidden="true">
               <span data-gallery-count>

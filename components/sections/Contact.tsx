@@ -116,6 +116,10 @@ export default function Contact() {
                 {status === "sending" ? "Sending…" : "Send enquiry"} <span aria-hidden="true">↗</span>
               </button>
             </Magnetic>
+            <p className="form-legal">
+              We only use your details to reply to your enquiry. No mailing lists.{" "}
+              <a href="/privacy">Privacy policy</a>
+            </p>
             <p className={`form-msg ${status}`} role="status" aria-live="polite">
               {status === "ok" && "Got it. We'll reply with next steps soon. Check your inbox, and your spam folder just in case."}
               {status === "error" && error}

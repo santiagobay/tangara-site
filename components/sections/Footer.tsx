@@ -35,6 +35,10 @@ export default function Footer() {
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Tangara</span>
+          <span className="footer-legal">
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+          </span>
           <span>{site.location}</span>
         </div>
       </div>

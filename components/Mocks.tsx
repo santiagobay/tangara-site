@@ -48,7 +48,10 @@ export default function Mock({ kind }: { kind: MockKind }) {
             <b>TERRA</b>
             <span>Shop</span>
             <span>Story</span>
-            <span className="pill">Cart · 2</span>
+            <span className="pill swap">
+              <span className="a">Cart · 2</span>
+              <span className="b">Cart · 3</span>
+            </span>
           </nav>
           <h4>
             GOOD
@@ -63,6 +66,7 @@ export default function Mock({ kind }: { kind: MockKind }) {
             <i />
           </div>
           <div className="sunb" />
+          <div className="toast">Added · Wildflower honey</div>
         </div>
       );
     case "casa":
@@ -91,6 +95,7 @@ export default function Mock({ kind }: { kind: MockKind }) {
           <div className="price">
             <small>From</small> $420k
           </div>
+          <div className="chip3d">3D model ↻</div>
         </div>
       );
     case "common":
@@ -109,7 +114,10 @@ export default function Mock({ kind }: { kind: MockKind }) {
             MEANING
           </h4>
           <div className="form">
-            <span>Your email</span>
+            <span className="typing">
+              <span className="ph">Your email</span>
+              <span className="val">ana@hey.com</span>
+            </span>
             <em>Get involved ↗</em>
           </div>
           <div className="ring" />
@@ -134,7 +142,10 @@ export default function Mock({ kind }: { kind: MockKind }) {
             <span>8:30</span>
             <span>9:00</span>
           </div>
-          <div className="book">Reserve ↗</div>
+          <div className="book swap">
+            <span className="a">Reserve ↗</span>
+            <span className="b">Confirmed ✓</span>
+          </div>
         </div>
       );
     case "iron":
@@ -187,6 +198,7 @@ export default function Mock({ kind }: { kind: MockKind }) {
             <span>you@email.com</span>
             <em>Join ↗</em>
           </div>
+          <div className="toast">+1 on the waitlist</div>
         </div>
       );
   }

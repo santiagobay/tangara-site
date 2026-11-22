@@ -26,9 +26,8 @@ export default function Services() {
             <Split text="Five services | *one* team" />
           </div>
           <p className="section-intro" data-reveal>
-            Hire one, or combine them. Most projects pair a brand with a website, and we quote them together.
-            Prices are starting points in Canadian dollars, before GST/HST. You get a fixed quote before we
-            start.
+            Hire one, or combine them. Most projects pair a brand with a website, and we plan them together.
+            Every project starts with a conversation and a fixed quote before any work begins.
           </p>
         </div>
 
@@ -49,10 +48,6 @@ export default function Services() {
                   ))}
                 </ul>
                 <div className="svc-foot">
-                  <p className="svc-price">
-                    <span>From</span> <b>{s.price}</b>
-                    {s.unit && <span> {s.unit}</span>}
-                  </p>
                   <a
                     href="#contact"
                     className="text-link"
