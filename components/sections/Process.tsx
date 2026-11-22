@@ -8,13 +8,13 @@ export default function Process() {
         <div className="section-head" data-fadeout>
           <div>
             <div className="eyebrow" data-reveal>
-              A clear path to distinct
+              Process
             </div>
-            <Split text="From first question | to *full signal.*" />
+            <Split text="How we work | five steps, no *surprises*" />
           </div>
           <p className="section-intro" data-reveal>
-            Our method starts by understanding you — before we propose anything. Every step keeps the big
-            idea connected to the details that make it real.
+            We start by understanding your business before we propose anything. You see the scope, the
+            price and the timeline in writing before any work begins.
           </p>
         </div>
 

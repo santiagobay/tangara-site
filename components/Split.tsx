@@ -37,7 +37,8 @@ export default function Split({
 /** Paragraph whose words light up as you scroll (animated by <Motion />). */
 export function ScrubWords({ text, className = "" }: { text: string; className?: string }) {
   return (
-    <p className={`scrub ${className}`} data-scrub-words aria-label={text}>
+    <p className={`scrub ${className}`} data-scrub-words>
+      <span className="sr-only">{text}</span>
       {text.split(" ").map((w, i) => (
         <span className="sw" key={i} aria-hidden="true">
           {w}{" "}

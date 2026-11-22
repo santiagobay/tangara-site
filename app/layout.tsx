@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   applicationName: site.name,
   alternates: { canonical: "/" },
   keywords: [
-    "creative studio",
-    "digital agency",
     "brand identity",
+    "small business website",
     "web design",
-    "web development",
-    "3D visualization",
-    "marketing",
+    "3D rendering",
+    "architectural renders",
+    "real estate marketing",
+    "marketing studio",
   ],
   openGraph: {
     type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: site.title,
     description: site.description,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Tangara — creative & digital studio" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Tangara — brand, websites & 3D for small businesses" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -53,16 +53,19 @@ const jsonLd = {
   url: site.url,
   email: site.email,
   logo: `${site.url}/brand/bird-mark.png`,
+  slogan: site.tagline,
+  priceRange: "CAD 590+",
   image: `${site.url}/og.png`,
   description: site.description,
   areaServed: "Worldwide",
   serviceType: [
     "Brand identity",
-    "Web design and development",
-    "3D visualization",
-    "Creative production",
-    "Marketing and communication",
+    "Website design and development",
+    "3D rendering and motion",
+    "Marketing and growth",
+    "Real estate and development marketing",
   ],
+  knowsLanguage: ["en", "es"],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,20 +1,22 @@
 export const site = {
   name: "Tangara",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://tangara.studio",
-  email: "hello@tangara.studio",
-  location: "Independent studio · Working worldwide",
-  title: "Tangara — Creative & digital studio for ambitious businesses",
+  // Note: tangara.studio belongs to an unrelated company — never use it here.
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://tangara-site.vercel.app").replace(/\/$/, ""),
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "santimax18@gmail.com",
+  location: "Founder-led studio · English & Spanish",
+  tagline: "Technology that moves businesses forward",
+  title: "Tangara — Brand, websites & 3D for small businesses",
   description:
-    "Tangara is a multidisciplinary creative and digital studio. Brand identity, websites, 3D & visual content, and marketing — for businesses of every kind.",
+    "Tangara is a new, founder-led studio for brand identity, websites, 3D and marketing. Clear prices from CAD $590 and a fixed quote before we start.",
 };
 
+/** Links are "/#section" so they also work from other pages (e.g. /team). */
 export const nav = [
-  { href: "#about", label: "Studio" },
-  { href: "#services", label: "Services" },
-  { href: "#lab", label: "Lab" },
-  { href: "#work", label: "Work" },
-  { href: "#approach", label: "Approach" },
-  { href: "#industries", label: "Industries" },
+  { href: "/#services", label: "Services" },
+  { href: "/#work", label: "Work" },
+  { href: "/#lab", label: "Lab" },
+  { href: "/#approach", label: "Process" },
+  { href: "/team", label: "Team" },
 ];
 
 export const objectives = [
@@ -30,42 +32,64 @@ export const pillars = [
   { k: "Personal", v: "Direct, attentive collaboration from first call to final delivery." },
 ];
 
-export const services = [
+export type Service = {
+  n: string;
+  /** Short id used to preselect the service in the contact form. */
+  id: string;
+  t: string;
+  outcome: string;
+  items: string[];
+  /** "From" price shown on the page — CAD, before GST/HST. */
+  price: string;
+  unit?: string;
+};
+
+/**
+ * Services, priced for the Canadian small-business market (Nov 2026 benchmarks), kept below
+ * typical agency rates and at least 10% above the original pricing sheet.
+ */
+export const services: Service[] = [
   {
     n: "01",
-    t: "Brand & business identity",
-    d: "Brand positioning, logo and visual identity, brand guidelines, presentations and promotional materials.",
-    tags: ["Positioning", "Logo & identity", "Guidelines", "Presentations"],
+    id: "brand",
+    t: "Brand identity",
+    outcome: "Look like the business you are, everywhere people meet you",
+    items: ["Strategy & positioning", "Logo & visual identity", "Brand guidelines", "Social media kit", "Brand refresh", "Marketing collateral"],
+    price: "CAD $590",
   },
   {
     n: "02",
-    t: "Web development & digital solutions",
-    d: "Business websites, e-commerce, landing pages, booking systems, redesigns and optimization.",
-    tags: ["Websites", "E-commerce", "Landing pages", "Booking systems"],
+    id: "web",
+    t: "Websites",
+    outcome: "A fast site that explains what you do and turns visits into enquiries",
+    items: ["Design & development", "Landing pages", "SEO essentials", "Contact & booking forms", "Analytics setup", "Online stores"],
+    price: "CAD $1,290",
   },
   {
     n: "03",
-    t: "Creative production & visual content",
-    d: "Commercial photography, product and property renders, 3D visualization and promotional pieces.",
-    tags: ["Photography", "3D renders", "Visualization", "Promo pieces"],
+    id: "3d",
+    t: "3D & motion",
+    outcome: "Show the product, the space or the idea before it exists",
+    items: ["Product renders", "Architectural renders", "3D web experiences", "Motion graphics", "Interactive exploded views", "Launch visuals"],
+    price: "CAD $690",
+    unit: "per render",
   },
   {
     n: "04",
-    t: "Marketing & communication",
-    d: "Social media content, advertising campaigns, marketing materials and promotional strategy.",
-    tags: ["Social content", "Campaigns", "Collateral", "Brand voice"],
+    id: "growth",
+    t: "Marketing & growth",
+    outcome: "Content, campaigns and lead capture that keep enquiries coming in",
+    items: ["Social media content", "Digital campaigns", "Lead capture & basic CRM", "Email & automation", "Analytics & reporting", "Ongoing support"],
+    price: "CAD $1,290",
+    unit: "per month",
   },
   {
     n: "05",
-    t: "Custom business solutions",
-    d: "Tailor-made creative projects, process improvements, commercial materials and customer-experience upgrades.",
-    tags: ["Bespoke projects", "Process", "Customer experience"],
-  },
-  {
-    n: "06",
-    t: "Flexible services",
-    d: "Every service can be hired on its own or combined into one integrated project.",
-    tags: ["À la carte", "Bundles", "Scalable"],
+    id: "realestate",
+    t: "Real estate & development",
+    outcome: "Sell the project before the first wall goes up",
+    items: ["Project website", "Architectural renders", "Investor materials", "Marketing strategy", "Lead capture", "Sales presentations"],
+    price: "CAD $3,490",
   },
 ];
 
@@ -75,15 +99,6 @@ export const processSteps = [
   { n: "03", k: "Build", t: "Planning & development", d: "We organize the project in stages and start design, development or production." },
   { n: "04", k: "Refine", t: "Review & adjustments", d: "We present progress, gather feedback and refine within the agreed scope." },
   { n: "05", k: "Deliver", t: "Delivery & support", d: "We hand over the finished project, files and access — and stay close when you need us." },
-];
-
-export const industries = [
-  { t: "Restaurants", d: "Brand, menu design, website, reservation system and promotional content." },
-  { t: "Real estate", d: "Websites, property renders, property presentations and marketing." },
-  { t: "Construction", d: "Website, project portfolio, 3D visualization and corporate materials." },
-  { t: "Retail", d: "Brand, online store, product photography and advertising." },
-  { t: "Professional services", d: "Corporate identity, website, presentations and client-acquisition materials." },
-  { t: "Startups", d: "Brand development, website, launch materials and marketing." },
 ];
 
 export const model = [
@@ -104,72 +119,79 @@ export type ShowcaseItem = {
   blurb: string;
   /** Shipped, publicly reachable project (the rest are concept builds). */
   live?: { href: string; lang: string };
+  /** Short honest case notes for real projects. */
+  notes?: { k: string; v: string }[];
 };
 
 export const showcase: ShowcaseItem[] = [
   {
     n: "01",
     name: "SAN.OS — Mi PC",
-    sector: "Live · Personal storytelling",
+    sector: "Not client work",
     url: "mi-pc-speedlogic-pc.vercel.app",
     kind: "sanos",
     live: { href: "https://mi-pc-speedlogic-pc.vercel.app/#inicio", lang: "Español" },
-    tags: ["Spanish-language", "Interactive exploded view", "Timeline", "Tech explainers"],
+    tags: ["Spanish-language", "Interactive exploded view", "Timeline", "Next.js"],
     blurb:
-      "A live site written and designed in Spanish: the story of one PC, from a laptop won in a contest to a custom-built tower. It has a terminal-style interface, an interactive exploded view you can drag and rotate, a year-by-year timeline and plain-language explainers. We create natively in English and Spanish.",
+      "Our own project, designed, written and built in-house in Spanish. Nobody paid for it. We made it to prove we can turn a technical story into something anyone can follow.",
+    notes: [
+      { k: "Challenge", v: "Explain years of hardware upgrades to people who don't speak tech." },
+      { k: "What we built", v: "A terminal-style interface, an exploded view you can drag and rotate, a year-by-year timeline and plain-language explainers." },
+      { k: "Stack", v: "Next.js, deployed on Vercel. Live and public." },
+    ],
   },
   {
     n: "02",
     name: "Terra Supply",
     sector: "Food & culture",
-    url: "terrasupply.co",
+    url: "concept / food & retail",
     kind: "terra",
     tags: ["Brand world", "Storefront", "Checkout"],
-    blurb: "A brand world and online store built around warmth, texture and a very clear product story.",
+    blurb: "Concept study: how we'd build a brand world and online store around warmth, texture and a clear product story.",
   },
   {
     n: "03",
     name: "Casa Forma",
     sector: "Real estate",
-    url: "casaforma.com",
+    url: "concept / real estate",
     kind: "casa",
     tags: ["Listings", "3D renders", "Virtual tour"],
-    blurb: "Property presentation with immersive renders and listings that make a home feel lived-in before the visit.",
+    blurb: "Concept study: how we'd present a property with immersive renders and listings that feel lived-in before the visit.",
   },
   {
     n: "04",
-    name: "Common Ground",
+    name: "Commons",
     sector: "Positioning + campaign",
-    url: "commonground.org",
+    url: "concept / campaign",
     kind: "common",
     tags: ["Positioning", "Campaign site", "Lead capture"],
-    blurb: "A campaign-ready site turning a sharp positioning into action and qualified enquiries.",
+    blurb: "Concept study: how we'd turn a sharp positioning into a campaign site built to capture enquiries.",
   },
   {
     n: "05",
     name: "Mesa",
     sector: "Restaurant",
-    url: "mesa.restaurant",
+    url: "concept / restaurant",
     kind: "mesa",
     tags: ["Menu", "Booking system", "Gallery"],
-    blurb: "A restaurant site with a real-time reservation flow and a menu that sells the evening.",
+    blurb: "Concept study: how we'd design a restaurant site with online booking and a menu that sells the evening.",
   },
   {
     n: "06",
     name: "Ironline",
     sector: "Construction",
-    url: "ironline.build",
+    url: "concept / construction",
     kind: "iron",
     tags: ["Project portfolio", "3D visualization", "Quote request"],
-    blurb: "A project portfolio with 3D visualization that lets clients see the build before it exists.",
+    blurb: "Concept study: how we'd show a builder's portfolio with 3D visualization, so clients see the build before it exists.",
   },
   {
     n: "07",
     name: "Launchpad",
     sector: "Startup",
-    url: "launchpad.app",
+    url: "concept / startup",
     kind: "launch",
     tags: ["Waitlist", "Product story", "Analytics"],
-    blurb: "A launch page designed to explain a new product in seconds and convert curiosity into signups.",
+    blurb: "Concept study: how we'd explain a new product in seconds and turn curiosity into waitlist signups.",
   },
 ];

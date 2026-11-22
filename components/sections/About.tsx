@@ -8,8 +8,8 @@ export default function About() {
         <div className="ticker-track">
           {Array.from({ length: 2 }).map((_, i) => (
             <span key={i}>
-              CLARITY ✳ CHARACTER ✳ CULTURE ✳ CREATIVE THAT MOVES BUSINESS ✳ BRAND ✳ WEB ✳ 3D ✳ CONTENT ✳
-              MARKETING ✳{" "}
+              Brand identity ✳ Websites ✳ 3D &amp; motion ✳ Marketing &amp; growth ✳ Real estate &amp;
+              development ✳{" "}
             </span>
           ))}
         </div>
@@ -20,14 +20,14 @@ export default function About() {
           <div className="eyebrow" data-reveal>
             Who we are
           </div>
-          <Split text="One studio. | *Every* touchpoint." />
+          <Split text="One team for | your brand, site | and *content*" />
         </div>
         <div className="about-copy">
-          <ScrubWords text="We are a multidisciplinary studio of creative and digital solutions that helps businesses develop, improve and strengthen their presence in the market. We bring creativity, technology, design and strategic thinking together — so a restaurant, a real-estate firm, a shop, a builder or a brand-new startup can communicate its value and give customers a better experience." />
+          <ScrubWords text="Tangara is a small studio for brand, web, 3D and marketing. Instead of hiring a designer, a developer and a marketer separately, you get one team that keeps your business looking and sounding the same everywhere: on your sign, your site, your socials and your sales deck." />
           <p className="muted" data-reveal>
-            Rather than specializing in a single industry or a single service, we adapt our capabilities to
-            each client&apos;s challenge — and aim to be the creative and strategic ally you can rely on as
-            your business grows.
+            We&apos;re new, and we say so. We work with small and growing businesses, from a restaurant
+            opening its second location to a developer pre-selling a project, and we stay close after
+            launch.
           </p>
         </div>
       </div>

@@ -455,10 +455,11 @@ function DataMotion() {
   const ref = useRef<HTMLButtonElement>(null);
   const [run, setRun] = useState(0);
   const nums = useRef<(HTMLElement | null)[]>([]);
-  const stats = [
-    { v: 148, pre: "+", suf: "%", k: "Enquiries" },
-    { v: 2.4, suf: "x", k: "Time on page", dec: 1 },
-    { v: 98, k: "Performance" },
+  // Placeholder figures only — never present these as client results.
+  const stats: { v: number; k: string; pre?: string; suf?: string; dec?: number }[] = [
+    { v: 12, k: "Your metric" },
+    { v: 3.5, k: "Your metric", dec: 1 },
+    { v: 64, suf: "%", k: "Your metric" },
   ];
   const bars = [32, 46, 40, 58, 52, 74, 68, 88, 96];
 
@@ -516,7 +517,7 @@ function DataMotion() {
       onClick={() => setRun((r) => r + 1)}
       data-cursor="Replay"
       data-sfx="none"
-      aria-label="Replay the data animation (sample data)"
+      aria-label="Replay the data animation (placeholder numbers)"
     >
       <span className="lab-stats">
         {stats.map((s, i) => (
@@ -531,7 +532,7 @@ function DataMotion() {
           <i key={i} style={{ "--h": `${b}%`, "--i": i } as React.CSSProperties} />
         ))}
       </span>
-      <span className="lab-hint mono">Sample data · click to replay</span>
+      <span className="lab-hint mono">Placeholder numbers · your data goes here · click to replay</span>
     </button>
   );
 }
@@ -627,7 +628,7 @@ const items = [
   { n: "05", area: "sound", t: "Sound design", d: "Custom UI sounds and sonic branding, synthesised live in the browser.", C: SoundPads },
   { n: "06", area: "grid", t: "Reactive surfaces", d: "Textures that ripple around the pointer.", C: DotGrid },
   { n: "07", area: "micro", t: "Micro-interactions", d: "Clear feedback at every step: tap, wait, done.", C: MicroButton },
-  { n: "08", area: "data", t: "Data in motion", d: "Numbers and charts that build as they are seen.", C: DataMotion },
+  { n: "08", area: "data", t: "Data in motion", d: "Your numbers and charts, built as they are seen. (Placeholder figures.)", C: DataMotion },
   { n: "09", area: "liquid", t: "Liquid shapes", d: "Organic forms that merge, stretch and follow.", C: Liquid },
 ];
 
@@ -638,13 +639,13 @@ export default function Lab() {
         <div className="section-head" data-fadeout>
           <div>
             <div className="eyebrow" data-reveal>
-              Lab / what we can build
+              Lab
             </div>
-            <Split text="Motion you can *feel.* | Try it live." />
+            <Split text="Built in-house | Ready for *your* site" />
           </div>
           <p className="section-intro" data-reveal>
-            A playground of the animation, interaction and sound we bring to client work. Every tile is live:
-            hover it, click it, scroll past it, and turn the sound on in the top bar.
+            Every tile below is live and made by us. Hover it, click it, scroll past it. Each one is
+            something we can build into your website, your launch or your presentation.
           </p>
         </div>
 

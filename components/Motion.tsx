@@ -118,7 +118,8 @@ export default function Motion() {
       gsap.utils.toArray<HTMLElement>("[data-scrub-words]").forEach((p) => {
         gsap.fromTo(
           p.querySelectorAll(".sw"),
-          { opacity: 0.14 },
+          // Never below ~4.5:1 contrast, even before the words are "lit".
+          { opacity: 0.5 },
           {
             opacity: 1,
             ease: "none",

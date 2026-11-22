@@ -10,11 +10,10 @@ export default function Model() {
             <div className="eyebrow" data-reveal>
               Ways to work together
             </div>
-            <Split text="Pick a lane. | *Switch* anytime." />
+            <Split text="Three ways to | work *with* us" />
           </div>
           <p className="section-intro" data-reveal>
-            Start small with a single project, bundle services into a package, or bring us in as an ongoing
-            creative partner.
+            Start with a single project, combine services into one quote, or bring us in every month.
           </p>
         </div>
         <ul className="model-grid" data-stagger>

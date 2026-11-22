@@ -6,9 +6,17 @@ export default function Footer() {
       <div className="wrap">
         <div className="footer-top">
           <div>
+            {/* The bird is the primary logo — same mark as the navigation. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/lockup.png" alt="Tangara" className="footer-lockup" width={160} />
-            <p className="muted">Independent by nature. Intentional by design.</p>
+            <img
+              src="/brand/bird-mark.png"
+              alt="Tangara"
+              className="footer-mark"
+              width={56}
+              height={56}
+              loading="lazy"
+            />
+            <p className="muted">{site.tagline}</p>
           </div>
           <nav aria-label="Footer">
             {nav.map((l) => (
@@ -16,14 +24,14 @@ export default function Footer() {
                 {l.label}
               </a>
             ))}
-            <a href="#contact">Contact</a>
+            <a href="/#contact">Contact</a>
           </nav>
           <a className="mail small" href={`mailto:${site.email}`}>
             {site.email}
           </a>
         </div>
         <div className="giant" aria-hidden="true">
-          tangara
+          Tangara
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Tangara</span>

@@ -49,21 +49,21 @@ export default function Hero() {
       <HeroScene />
       <div className="hero-content">
         <div className="eyebrow" data-intro>
-          Brands with a point of view
+          New studio · Brand, web &amp; 3D for small businesses
         </div>
-        <Split tag="h1" mode="intro" className="hero-title" text="Make your | brand *mean* | more." />
+        <Split tag="h1" mode="intro" className="hero-title" text="A brand and | website that | *bring* you customers" />
         <p className="intro" data-intro>
-          A multidisciplinary studio of creative and digital solutions. We help businesses of every kind
-          establish, improve, connect and grow — from identity to a website people remember.
+          We&apos;re a new, founder-led studio. You work directly with the people doing the work, get a
+          fixed quote before we start and a timeline in writing. Services from CAD $590.
         </p>
         <div className="hero-actions" data-intro>
           <Magnetic>
             <a className="btn" href="#contact" onClick={(e) => jump(e, "#contact")}>
-              Start a project <span aria-hidden="true">↗</span>
+              Get a quote <span aria-hidden="true">↗</span>
             </a>
           </Magnetic>
-          <a className="text-link" href="#work" onClick={(e) => jump(e, "#work")}>
-            See what we can build ↓
+          <a className="text-link" href="#services" onClick={(e) => jump(e, "#services")}>
+            See services &amp; prices ↓
           </a>
         </div>
       </div>
@@ -71,8 +71,8 @@ export default function Hero() {
         <span>Brand</span>
         <span>Web</span>
         <span>3D</span>
-        <span>Content</span>
         <span>Marketing</span>
+        <span>Real estate</span>
         <span className="scroll-cue">
           Scroll <i aria-hidden="true" />
         </span>

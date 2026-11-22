@@ -47,7 +47,7 @@ export default function CtaScene() {
     } catch {
       return;
     }
-    const pr = Math.min(window.devicePixelRatio || 1, 2);
+    const pr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.25 : 1.75);
     renderer.setPixelRatio(pr);
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
@@ -82,6 +82,7 @@ export default function CtaScene() {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       orb.scale.setScalar(w < 700 ? 0.8 : 1);
+      if (reduce) renderer.render(scene, camera);
     };
     layout();
     const ro = new ResizeObserver(layout);
@@ -111,8 +112,9 @@ export default function CtaScene() {
     const clock = new THREE.Clock();
     let raf = 0;
     const frame = () => {
-      raf = requestAnimationFrame(frame);
-      if (!visible) return;
+      // Reduced motion: draw one still frame, no loop.
+      if (!reduce) raf = requestAnimationFrame(frame);
+      if (!visible && !reduce) return;
       const t = clock.getElapsedTime();
       energy *= 0.94;
       uniforms.uTime.value = t;

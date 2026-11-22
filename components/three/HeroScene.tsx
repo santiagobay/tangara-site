@@ -101,7 +101,7 @@ export default function HeroScene() {
       setFailed(true);
       return;
     }
-    const pr = Math.min(window.devicePixelRatio || 1, 2);
+    const pr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.25 : 1.75);
     renderer.setPixelRatio(pr);
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
@@ -192,6 +192,7 @@ export default function HeroScene() {
       points = new THREE.Points(geo, material);
       points.frustumCulled = false;
       group.add(points);
+      if (reduce) renderer.render(scene, camera);
 
       if (!reduce) {
         onReady(() => {
@@ -221,6 +222,7 @@ export default function HeroScene() {
         group.scale.setScalar(Math.min(0.42, Math.max(0.26, aspect * 0.62)));
       }
       uniforms.uSize.value = aspect > 1.15 ? 8 : 4.2;
+      if (reduce) renderer.render(scene, camera);
     };
     layout();
     const ro = new ResizeObserver(layout);
@@ -244,8 +246,9 @@ export default function HeroScene() {
     const halfH = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
 
     const frame = () => {
-      raf = requestAnimationFrame(frame);
-      if (!visible) return;
+      // Reduced motion: draw still frames only (on load/resize), no loop.
+      if (!reduce) raf = requestAnimationFrame(frame);
+      if (!visible && !reduce) return;
       const t = clock.getElapsedTime();
       uniforms.uTime.value = t;
 

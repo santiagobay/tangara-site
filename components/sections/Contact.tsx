@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Split from "../Split";
 import Magnetic from "../Magnetic";
 import { services, site } from "@/lib/site";
@@ -13,6 +13,24 @@ type Status = "idle" | "sending" | "ok" | "error";
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  // The 3D orb (and Three.js) only loads when the visitor gets close to this section.
+  const sectionRef = useRef<HTMLElement>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setNear(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,17 +56,17 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="section contact">
-      <CtaScene />
+    <section id="contact" ref={sectionRef} className="section contact">
+      {near && <CtaScene />}
       <div className="wrap contact-grid">
         <div className="contact-copy">
           <div className="eyebrow" data-reveal>
-            Your next chapter starts here
+            Contact
           </div>
-          <Split text="Ready to make | your brand *matter?*" />
+          <Split text="Tell us what | you're *building*" />
           <p className="muted" data-reveal>
-            Tell us where you want to go. Describe your project — a website, a brand, a launch — and we&apos;ll
-            come back with a clear first proposal.
+            A website, a brand, a launch: describe it in a few lines. We&apos;ll reply with next steps and,
+            if we&apos;re a good fit, a fixed quote.
           </p>
           <a className="mail" href={`mailto:${site.email}`} data-reveal data-cursor="Email">
             {site.email}
@@ -79,6 +97,8 @@ export default function Contact() {
                   {s.t}
                 </option>
               ))}
+              <option value="Brand + website">Brand + website</option>
+              <option value="Not sure yet">Not sure yet — help me choose</option>
             </select>
           </div>
           <div className="field full">
@@ -87,17 +107,17 @@ export default function Contact() {
           </div>
           {/* Honeypot — hidden from people, tempting to bots */}
           <div className="hp" aria-hidden="true">
-            <label htmlFor="website">Website</label>
+            <label htmlFor="website">Leave this field empty</label>
             <input id="website" name="website" tabIndex={-1} autoComplete="off" />
           </div>
           <div className="form-foot">
             <Magnetic>
               <button className="btn" type="submit" disabled={status === "sending"}>
-                {status === "sending" ? "Sending…" : "Tell us what you’re building"} <span aria-hidden="true">↗</span>
+                {status === "sending" ? "Sending…" : "Send enquiry"} <span aria-hidden="true">↗</span>
               </button>
             </Magnetic>
             <p className={`form-msg ${status}`} role="status" aria-live="polite">
-              {status === "ok" && "Thank you — we'll be in touch shortly."}
+              {status === "ok" && "Got it. We'll reply with next steps soon. Check your inbox, and your spam folder just in case."}
               {status === "error" && error}
             </p>
           </div>

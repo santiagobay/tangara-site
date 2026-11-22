@@ -97,7 +97,7 @@ export default function Mock({ kind }: { kind: MockKind }) {
       return (
         <div className="screen mk mk-common" aria-hidden="true">
           <nav>
-            <b>Common Ground</b>
+            <b>Commons</b>
             <span>Join</span>
             <span>Impact</span>
           </nav>
