@@ -3,6 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // The old direction-study pages became full website templates.
+  redirects: async () => [
+    { source: "/work/mesa", destination: "/templates/restaurant", permanent: true },
+    { source: "/work/casa-forma", destination: "/templates/real-estate", permanent: true },
+    { source: "/work/terra-supply", destination: "/templates/store", permanent: true },
+    { source: "/work/:slug", destination: "/#work", permanent: false },
+  ],
   headers: async () => [
     {
       source: "/(.*)",

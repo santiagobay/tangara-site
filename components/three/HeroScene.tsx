@@ -61,7 +61,7 @@ void main(){
 }
 `;
 
-function samplePoints(img: HTMLImageElement, width: number) {
+function samplePoints(img: HTMLImageElement, width: number, step = 2) {
   const ratio = img.height / img.width;
   const cw = 240;
   const ch = Math.round(cw * ratio);
@@ -72,7 +72,6 @@ function samplePoints(img: HTMLImageElement, width: number) {
   ctx.drawImage(img, 0, 0, cw, ch);
   const data = ctx.getImageData(0, 0, cw, ch).data;
   const pts: number[] = [];
-  const step = 2;
   for (let y = 0; y < ch; y += step) {
     for (let x = 0; x < cw; x += step) {
       if (data[(y * cw + x) * 4 + 3] > 110) {
@@ -93,6 +92,11 @@ export default function HeroScene() {
     const el = host.current;
     if (!el) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Lighter scene on phones and modest machines.
+    const lowEnd =
+      window.innerWidth < 768 ||
+      (navigator.hardwareConcurrency || 8) <= 4 ||
+      ((navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8) <= 4;
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -101,7 +105,7 @@ export default function HeroScene() {
       setFailed(true);
       return;
     }
-    const pr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.25 : 1.75);
+    const pr = Math.min(window.devicePixelRatio || 1, lowEnd ? 1 : 1.5);
     renderer.setPixelRatio(pr);
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
@@ -140,7 +144,7 @@ export default function HeroScene() {
     group.add(wire);
 
     // Ambient dust
-    const dustN = 500;
+    const dustN = lowEnd ? 140 : 300;
     const dustPos = new Float32Array(dustN * 3);
     for (let i = 0; i < dustN; i++) {
       dustPos[i * 3] = (Math.random() - 0.5) * 22;
@@ -161,7 +165,7 @@ export default function HeroScene() {
     img.src = "/brand/bird-mark.png";
     img.onload = () => {
       if (disposed) return;
-      const t = samplePoints(img, 4.8);
+      const t = samplePoints(img, 4.8, lowEnd ? 3 : 2);
       const n = t.length / 2;
       const start = new Float32Array(n * 3);
       const target = new Float32Array(n * 3);

@@ -24,11 +24,11 @@ export default function TermsPage() {
         you may not copy, reproduce or reuse it for commercial purposes without our written permission.
       </p>
 
-      <h2>Direction studies and examples</h2>
+      <h2>Templates and examples</h2>
       <p>
-        Pieces labelled &quot;direction study&quot; or &quot;concept&quot; are illustrative work created by
-        Tangara to show our approach. They are not client projects, and any brand names, figures or prices
-        shown in them are fictional.
+        The website templates on this site are illustrative work created by Tangara. They are not client
+        projects: the brands, addresses, prices and figures shown in them are fictional, and forms inside
+        them do not send any information.
       </p>
 
       <h2>Quotes and services</h2>

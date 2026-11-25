@@ -3,6 +3,7 @@ import Motion from "@/components/Motion";
 import Cursor from "@/components/Cursor";
 import { SoundFX } from "@/components/Sound";
 import Preloader from "@/components/Preloader";
+import AmbientField from "@/components/AmbientField";
 import Nav from "@/components/Nav";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -21,6 +22,7 @@ export default function Home() {
       <SmoothScroll />
       <Cursor />
       <SoundFX />
+      <AmbientField />
       <div className="grain" aria-hidden="true" />
       <Nav />
       <main>

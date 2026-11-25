@@ -40,6 +40,11 @@ export default function CtaScene() {
     const el = host.current;
     if (!el) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Lighter scene on phones and modest machines.
+    const lowEnd =
+      window.innerWidth < 768 ||
+      (navigator.hardwareConcurrency || 8) <= 4 ||
+      ((navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8) <= 4;
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -47,7 +52,7 @@ export default function CtaScene() {
     } catch {
       return;
     }
-    const pr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.25 : 1.75);
+    const pr = Math.min(window.devicePixelRatio || 1, lowEnd ? 1 : 1.5);
     renderer.setPixelRatio(pr);
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
@@ -61,7 +66,7 @@ export default function CtaScene() {
       uEnergy: { value: 0 },
       uPixelRatio: { value: pr },
     };
-    const geo = new THREE.IcosahedronGeometry(1.9, 16);
+    const geo = new THREE.IcosahedronGeometry(1.9, lowEnd ? 8 : 12);
     const mat = new THREE.ShaderMaterial({
       vertexShader: VERT,
       fragmentShader: FRAG,

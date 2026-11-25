@@ -2,13 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { sfx } from "@/lib/sfx";
-import type { MockKind } from "@/lib/site";
 
 const reduced = () =>
   typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ── Casa Forma: a CSS 3D townhouse that turns with the pointer (or a drag on touch) ── */
-function House() {
+export function House() {
   const stage = useRef<HTMLDivElement>(null);
   const model = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -81,7 +80,7 @@ function House() {
 }
 
 /* ── Mesa: three-tap reservation ─────────────────────────────────────────── */
-function Booking() {
+export function Booking() {
   const days = ["Tonight", "Tomorrow", "Fri"];
   const times = ["6:30", "7:00", "7:30", "8:00", "8:30", "9:00"];
   const [day, setDay] = useState(0);
@@ -158,7 +157,7 @@ function Booking() {
 }
 
 /* ── Terra Supply: product card with a live cart count ───────────────────── */
-function Product() {
+export function Product() {
   const [count, setCount] = useState(2);
   const [bump, setBump] = useState(0);
   const [added, setAdded] = useState(false);
@@ -202,10 +201,4 @@ function Product() {
       </div>
     </div>
   );
-}
-
-export default function Signature({ kind }: { kind: MockKind }) {
-  if (kind === "casa") return <House />;
-  if (kind === "mesa") return <Booking />;
-  return <Product />;
 }

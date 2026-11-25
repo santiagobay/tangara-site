@@ -4,6 +4,7 @@ import Motion from "@/components/Motion";
 import Cursor from "@/components/Cursor";
 import { SoundFX } from "@/components/Sound";
 import Preloader from "@/components/Preloader";
+import AmbientField from "@/components/AmbientField";
 import Nav from "@/components/Nav";
 import Footer from "@/components/sections/Footer";
 import Split from "@/components/Split";
@@ -24,6 +25,7 @@ export default function TeamPage() {
       <SmoothScroll />
       <Cursor />
       <SoundFX />
+      <AmbientField />
       <div className="grain" aria-hidden="true" />
       <Nav />
       <main>

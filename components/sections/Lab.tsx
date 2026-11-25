@@ -272,57 +272,129 @@ function ScrollPath() {
 
 /* ── 05 · Reactive dot grid: follows the pointer, ripples on click ─────── */
 function DotGrid() {
-  const ref = useRef<HTMLDivElement>(null);
-  const cols = 22;
-  const rows = 9;
-  const each = (e: React.PointerEvent, fn: (d: HTMLElement, dist: number) => void) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const px = e.clientX - r.left;
-    const py = e.clientY - r.top;
-    const dots = el.querySelectorAll<HTMLElement>("i");
-    dots.forEach((d, k) => {
-      const x = ((k % cols) + 0.5) * (r.width / cols);
-      const y = (Math.floor(k / cols) + 0.5) * (r.height / rows);
-      fn(d, Math.hypot(x - px, y - py));
-    });
-  };
-  const move = (e: React.PointerEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    el.classList.add("is-active");
-    each(e, (d, dist) => d.style.setProperty("--s", Math.max(0, 1 - dist / 130).toFixed(3)));
-  };
-  const leave = () => {
-    const el = ref.current;
-    if (!el) return;
-    el.classList.remove("is-active", "is-ripple");
-    el.querySelectorAll<HTMLElement>("i").forEach((d) => d.style.removeProperty("--s"));
-  };
-  const ripple = (e: React.PointerEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    el.classList.remove("is-ripple");
-    each(e, (d, dist) => d.style.setProperty("--rd", `${(dist / 900).toFixed(3)}s`));
-    void el.offsetWidth;
-    el.classList.add("is-ripple");
-    sfx.note(0, { gain: 0.12, dur: 1.2 });
-    sfx.note(4, { gain: 0.06, dur: 1.4 });
-  };
+  // One canvas instead of ~200 animated DOM nodes: the old version restyled every dot on every
+  // pointer move (plus an infinite CSS animation per dot), which froze slower machines.
+  const cv = useRef<HTMLCanvasElement>(null);
+  const vis = useVisible(cv);
+  const api = useRef<{ ripple: (x: number, y: number) => void }>({ ripple: () => {} });
+
+  useEffect(() => {
+    const c = cv.current;
+    const ctx = c?.getContext("2d");
+    if (!c || !ctx) return;
+    const still = reduced();
+    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+    const cols = 22;
+    const rows = 9;
+    let w = 0;
+    let h = 0;
+    const mouse = { x: -999, y: -999, on: false };
+    let ripples: { x: number; y: number; t: number }[] = [];
+    let raf = 0;
+    let running = false;
+
+    const size = () => {
+      const r = c.getBoundingClientRect();
+      w = r.width;
+      h = r.height;
+      c.width = Math.round(w * dpr);
+      c.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw(performance.now());
+    };
+
+    function draw(now: number) {
+      ctx!.clearRect(0, 0, w, h);
+      const gx = w / cols;
+      const gy = (h - 20) / rows;
+      const t = now / 1000;
+      for (let j = 0; j < rows; j++) {
+        for (let i = 0; i < cols; i++) {
+          const x = (i + 0.5) * gx;
+          const y = (j + 0.5) * gy;
+          // idle wave
+          let s = still ? 0.2 : 0.18 + 0.16 * Math.sin(t * 2 - (i + j) * 0.35);
+          if (mouse.on) s = Math.max(s, 1 - Math.hypot(x - mouse.x, y - mouse.y) / 130);
+          let hot = 0;
+          for (const r of ripples) {
+            const rad = ((now - r.t) / 900) * 520;
+            const d = Math.abs(Math.hypot(x - r.x, y - r.y) - rad);
+            if (d < 28) hot = Math.max(hot, 1 - d / 28);
+          }
+          const rad = 2.5 * (1 + s * 1.6 + hot * 1.6);
+          ctx!.globalAlpha = Math.min(1, 0.25 + s * 0.75 + hot);
+          ctx!.fillStyle = hot > 0.3 ? "#f6c98b" : "#a4f2c0";
+          ctx!.beginPath();
+          ctx!.arc(x, y, rad, 0, Math.PI * 2);
+          ctx!.fill();
+        }
+      }
+      ctx!.globalAlpha = 1;
+    }
+
+    // Only animate while the tile is on screen and either idle-waving or interacting.
+    const loop = (now: number) => {
+      ripples = ripples.filter((r) => now - r.t < 1200);
+      if (!vis.current && !mouse.on && ripples.length === 0) {
+        running = false;
+        return;
+      }
+      draw(now);
+      raf = requestAnimationFrame(loop);
+    };
+    const start = () => {
+      if (running || still) return;
+      running = true;
+      raf = requestAnimationFrame(loop);
+    };
+
+    const ro = new ResizeObserver(size);
+    ro.observe(c);
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && start());
+    io.observe(c);
+
+    const local = (e: PointerEvent) => {
+      const r = c.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    };
+    const move = (e: PointerEvent) => {
+      const p = local(e);
+      mouse.x = p.x;
+      mouse.y = p.y;
+      mouse.on = true;
+      if (still) draw(performance.now());
+      else start();
+    };
+    const leave = () => {
+      mouse.on = false;
+      if (still) draw(performance.now());
+    };
+    api.current.ripple = (x, y) => {
+      ripples.push({ x, y, t: performance.now() });
+      start();
+    };
+    const down = (e: PointerEvent) => {
+      const p = local(e);
+      api.current.ripple(p.x, p.y);
+      sfx.note(0, { gain: 0.12, dur: 1.2 });
+      sfx.note(4, { gain: 0.06, dur: 1.4 });
+    };
+    c.addEventListener("pointermove", move);
+    c.addEventListener("pointerleave", leave);
+    c.addEventListener("pointerdown", down);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      io.disconnect();
+      c.removeEventListener("pointermove", move);
+      c.removeEventListener("pointerleave", leave);
+      c.removeEventListener("pointerdown", down);
+    };
+  }, [vis]);
+
   return (
-    <div
-      ref={ref}
-      className="lab-stage lab-grid"
-      style={{ "--cols": cols, "--rows": rows } as React.CSSProperties}
-      onPointerMove={move}
-      onPointerLeave={leave}
-      onPointerDown={ripple}
-      data-cursor="Ripple"
-    >
-      {Array.from({ length: cols * rows }, (_, k) => (
-        <i key={k} style={{ "--d": (k % cols) + Math.floor(k / cols) } as React.CSSProperties} />
-      ))}
+    <div className="lab-stage lab-grid" data-cursor="Ripple">
+      <canvas ref={cv} />
       <span className="lab-hint mono">Move · click</span>
     </div>
   );
